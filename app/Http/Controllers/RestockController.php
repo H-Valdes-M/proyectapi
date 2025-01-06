@@ -12,6 +12,13 @@ use Illuminate\Http\Request;
 
 class RestockController extends Controller
 {
+
+
+
+
+
+
+
     // Mostrar todas las reposiciones
     public function index()
     {
@@ -78,4 +85,11 @@ class RestockController extends Controller
         $restocksEliminados = Restock::onlyTrashed()->get(); // Devuelve las reposiciones eliminadas
         return response()->json($restocksEliminados);
     }
+
+
+
+
+
+
+
 }

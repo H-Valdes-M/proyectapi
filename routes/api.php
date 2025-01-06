@@ -10,6 +10,11 @@ use Illuminate\Support\Facades\Route;
 
 
 
+
+
+
+
+
 //rutas user
 Route::get('/user', [UserController::class, 'index'])->name('user.index'); // Lista todos los usuarios
 Route::get('/user/getuser', [UserController::class, 'getUsers'])->name('user.getUser');
@@ -21,6 +26,18 @@ Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.dest
 Route::patch('/user/{id}/activate', [UserController::class, 'activate'])->name('user.activate'); // Activa un usuario
 Route::patch('/user/{id}/deactivate', [UserController::class, 'deactivate'])->name('user.deactivate'); // Desactiva un usuario
 Route::post('/user/login', [UserController::class, 'login'])->name('user.login');
+
+
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return response()->json([
+        'id' => $request->user()->id,
+        'name' => $request->user()->name,
+        'email' => $request->user()->email
+    ]);
+});
+
+
+
 
 //rutas tribunales
 Route::get('/tribunal', [TribunalController::class, 'index'])->name('tribunal.index');
@@ -51,6 +68,8 @@ Route::get('/restock/{id}', [RestockController::class, 'show']);
 Route::put('/restock/{id}', [RestockController::class, 'update']); //medio descartable
 Route::delete('/restock/{id}', [RestockController::class, 'destroy']); //borrado logico
 Route::get('/restock/trashed', [RestockController::class, 'trashed']); //recuperacion
+
+
 
 // Rutas para la guia de envio
 Route::get('/shipments', [ShipmentController::class, 'index'])->name('shipments.index');
