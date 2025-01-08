@@ -13,6 +13,15 @@ class TribunalController extends Controller
         return response()->json(Tribunal::all(), 200);
     }
 
+
+    public function getTribunal()
+    {
+        $tribunal = Tribunal::select('id', 'nombre_Tribunal')->orderBy('nombre_Tribunal')->get();
+        return response()->json($tribunal);
+    }
+    
+
+
     // Método para crear un tribunal
     public function store(Request $request)
     {

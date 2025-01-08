@@ -13,14 +13,14 @@ class Restock extends Model
 
     protected $table = 'restock'; 
 
-
     protected $fillable = [
-        'producto',
-        'usuario',
-        'fecha',
-        'cant_unidades',
+        'producto',       // ID del producto relacionado
+        'usuario',        // ID del usuario relacionado
+        'fecha',          // Fecha del reabastecimiento
+        'cant_unidades',  // Cantidad de unidades reabastecidas
+        'coment',         // Comentario adicional
+        'doc',            // Ruta del archivo relacionado
     ];
-
     // Relación con Producto
     public function producto()
     {

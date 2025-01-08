@@ -21,6 +21,7 @@ class UserController extends Controller
     }
     
     
+     
     public function store(Request $request)
     {
         $data = $request->validate([
@@ -34,7 +35,6 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
     }
-
     public function activate($id)
     {
         $user = User::findOrFail($id);
@@ -98,34 +98,39 @@ class UserController extends Controller
 
 
     //Log de usuario
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
 
-        $user = User::where('email', $credentials['email'])->first();
 
-        if (!$user || !Hash::check($credentials['password'], $user->password)) {
-            return response()->json(['success' => false, 'message' => 'Invalid credentials'], 401);
-    }
 
-    // Verificar si el usuario está eliminado lógicamente (deleted_at no es null)
-    if ($user->deleted_at !== null) {
-        return response()->json(['success' => false, 'message' => 'User is inactive'], 403);
-    }
+//Log de usuario
+public function login(Request $request)
+{
+    $credentials = $request->validate([
+        'email' => 'required|string|email',
+        'password' => 'required|string',
+    ]);
 
-        // Generar un token
-        $token = $user->createToken('auth_token')->plainTextToken;
+    $user = User::where('email', $credentials['email'])->first();
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Login successful',
-            'token' => $token,
-            'user' => $user,
-        ]);
-    }
+    if (!$user || !Hash::check($credentials['password'], $user->password)) {
+        return response()->json(['success' => false, 'message' => 'Invalid credentials'], 401);
+}
+
+// Verificar si el usuario está eliminado lógicamente (deleted_at no es null)
+if ($user->deleted_at !== null) {
+    return response()->json(['success' => false, 'message' => 'User is inactive'], 403);
+}
+
+    // Generar un token
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+    return response()->json([
+        'success' => true,
+        'message' => 'Login successful',
+        'token' => $token,
+        'user' => $user,
+    ]);
+}
+
 
 
 
