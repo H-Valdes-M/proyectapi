@@ -20,6 +20,7 @@ class Restock extends Model
         'cant_unidades',  // Cantidad de unidades reabastecidas
         'coment',         // Comentario adicional
         'doc',            // Ruta del archivo relacionado
+        'accion',         //añade o retira productos
     ];
     // Relación con Producto
     public function producto()

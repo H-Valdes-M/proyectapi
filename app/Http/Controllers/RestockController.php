@@ -5,9 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Restock;
 use App\Models\Product;  
 use App\Models\User;
-
 use App\Http\Resources\ShipmentResource;
-
 use Illuminate\Http\Request;
 
 class RestockController extends Controller
@@ -30,6 +28,7 @@ class RestockController extends Controller
         'cant_unidades' => 'required|integer',
         'coment' => 'nullable|string',
         'doc' => 'nullable|file|mimes:pdf,jpg,png,docx|max:10240',
+        'accion' => 'required|integer',
     ]);
 
 
@@ -37,8 +36,23 @@ class RestockController extends Controller
         // Buscar el producto en la base de datos
         $product = Product::findOrFail($request->producto);
 
+        // Comprobar que no se restan más unidades de las disponibles
+        if ($request->accion == 0 && $product->unidades_disponible < $request->cant_unidades) {
+            return response()->json([
+                'success' => false,
+                'message' => 'No hay suficientes unidades disponibles para restar.',
+                'error' => 'Cantidad insuficiente',
+            ], 400); 
+        }
+        
+
         // Actualizar las unidades disponibles del producto
-        $product->unidades_disponible += $request->cant_unidades;
+        if ($request->accion == 0) {
+            $product->unidades_disponible -= $request->cant_unidades;  // Restar unidades
+        } else {
+            $product->unidades_disponible += $request->cant_unidades;  // Sumar unidades
+        }
+
         $product->save();
 
         // Crear el registro de reabastecimiento
@@ -49,21 +63,22 @@ class RestockController extends Controller
             'cant_unidades' => $request->cant_unidades,
             'coment' => $request->coment,
             'doc' => null, // Se deja null de momento
+            'accion'=>$request->accion,
         ]);
 
         // Confirmar transacción
 
 
         return response()->json([
+            'success' => true,
             'message' => 'Reabastecimiento registrado exitosamente y unidades del producto actualizadas.',
             'restock' => $restock,
             'producto_actualizado' => $product,
         ], 201);
     } catch (\Exception $e) {
         // Revertir transacción en caso de error
-
-
         return response()->json([
+            'success' => false,
             'message' => 'Ocurrió un error al registrar el reabastecimiento.',
             'error' => $e->getMessage(),
         ], 500);

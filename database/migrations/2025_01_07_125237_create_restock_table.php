@@ -19,6 +19,7 @@ return new class extends Migration
             $table->integer('cant_unidades');
             $table->string('coment')->nullable();  // Comentarios (opcional)
             $table->string('doc')->nullable();     // Documento relacionado (opcional)
+            $table->tinyInteger('accion')->default(1);
             $table->timestamps();
             $table->softDeletes(); // Borrado lógico
 
