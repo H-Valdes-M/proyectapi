@@ -16,6 +16,7 @@ class RestockController extends Controller
         $restocks = Restock::all(); // Solo devuelve las que no están "eliminadas"
         return response()->json($restocks);
     }
+    
 
     // Crear una nueva reposición
     public function store(Request $request)
@@ -117,4 +118,14 @@ class RestockController extends Controller
         $restocksEliminados = Restock::onlyTrashed()->get(); // Devuelve las reposiciones eliminadas
         return response()->json($restocksEliminados);
     }
+
+
+
+    public function getRestockFormat()
+{
+    $restocks = Restock::with('producto','usuario')->get();
+   return response()->json($restocks->toArray());
+}
+
+
 }

@@ -5,6 +5,9 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RestockController;
 use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\ShipmentDetailController;
+use App\Http\Controllers\FileUploadController;
+
+
 
 use Illuminate\Support\Facades\Route;
 
@@ -49,12 +52,15 @@ Route::get('/productos/{tipoEquipo}/{marca}/modelos', [ProductController::class,
 
 
 // Rutas para restock 
-Route::get('/restock', [RestockController::class, 'index']);
+Route::get('/restock', [RestockController::class, 'getRestockFormat']);
 Route::post('/restock', [RestockController::class, 'store']);
 Route::get('/restock/{id}', [RestockController::class, 'show']);
 Route::put('/restock/{id}', [RestockController::class, 'update']); //medio descartable
 Route::delete('/restock/{id}', [RestockController::class, 'destroy']); //borrado logico
 Route::get('/restock/trashed', [RestockController::class, 'trashed']); //recuperacion
+
+
+
 
 // Rutas para la guia de envio
 Route::get('/shipments', [ShipmentController::class, 'index'])->name('shipments.index');
@@ -73,3 +79,6 @@ Route::delete('/shipment-details/{id}', [ShipmentDetailController::class, 'destr
 
 
 
+
+//Route::get('/upload', [FileUploadController::class, 'index']); 
+//Route::post('/upload', [FileController::class, 'store']);

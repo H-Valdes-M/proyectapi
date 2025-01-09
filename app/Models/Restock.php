@@ -25,12 +25,12 @@ class Restock extends Model
     // Relación con Producto
     public function producto()
     {
-        return $this->belongsTo(Producto::class);
+        return $this->belongsTo(Product::class, 'producto', 'id');
     }
 
     // Relación con Usuario
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class);
+        return $this->belongsTo(User::class, 'usuario', 'id');
     }
 }
