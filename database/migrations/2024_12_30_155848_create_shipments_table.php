@@ -15,8 +15,6 @@ return new class extends Migration
         $table->date('fecha');
         $table->string('destinatario', 100);
         $table->string('observacion', 255)->nullable();
-        $table->string('guiadeMov', 255)->nullable();
-        $table->string('nguiaMov', 50)->nullable();
         $table->timestamps();
         $table->softDeletes(); // Borrado lógico
 

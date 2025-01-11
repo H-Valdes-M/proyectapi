@@ -16,6 +16,13 @@ class Product extends Model
         'modelo',
         'unidades_disponible',
         'stock_critico',
-        'estado_producto',
+
+    ];
+
+
+    protected $casts = [
+        'unidades_disponible' => 'integer',
+        'stock_critico' => 'integer',
+        'estado_producto' => 'integer',
     ];
 }

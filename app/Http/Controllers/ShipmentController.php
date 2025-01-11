@@ -10,30 +10,53 @@ class ShipmentController extends Controller
     // Mostrar todos los envíos
     public function index()
     {
-        $shipments = Shipment::with(['user', 'tribunal'])->get();
-
+        $shipments = Shipment::with(['usuario', 'tribunal'])->get();
        // $shipments = Shipment::all(); // Solo devuelve las que no están "eliminadas"
-        return response()->json($shipments);
+        return response()->json($shipments->toArray());
     }
 
     // Crear un nuevo envío
     public function store(Request $request)
     {
-        $request->validate([
-            'usuario' => 'required|exists:users,id',
-            'tribunal' => 'required|exists:tribunal,id',
-            'fecha' => 'required|date',
-            'destinatario' => 'required|string|max:100',
-            'observacion' => 'nullable|string|max:255',
-            'guiadeMov' => 'required|string|max:255',
-            'nguiaMov' => 'required|string|max:50',
-        ]);
-
-        $shipment = Shipment::create($request->all());
-
-        return response()->json($shipment, 201);
+        try {
+            // Validar los datos de entrada
+            $request->validate([
+                'usuario' => 'required|exists:users,id',
+                'tribunal' => 'required|exists:tribunal,id',
+                'fecha' => 'required|date',
+                'destinatario' => 'required|string|max:100',
+                'observacion' => 'nullable|string|max:255',
+            ]);
+    
+            // Crear el registro de Shipment
+            $shipment = Shipment::create($request->all());
+    
+            // Respuesta exitosa
+            return response()->json([
+                'success' => true,
+                'message' => 'Envío creado exitosamente.',
+                'shipment' => $shipment
+            ], 201);
+    
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Errores de validación
+            return response()->json([
+                'success' => false,
+                'message' => 'Errores de validación.',
+                'errors' => $e->errors()
+            ], 422);
+    
+        } catch (\Exception $e) {
+            // Errores inesperados (como problemas de base de datos)
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error al crear el envío.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
+    
     // Mostrar un envío específico
     public function show($id)
     {
@@ -65,4 +88,33 @@ class ShipmentController extends Controller
         $shipmentsEliminados = Shipment::onlyTrashed()->get(); // Devuelve los envíos eliminados
         return response()->json($shipmentsEliminados);
     }
+
+
+
+    public function getLastShipmentId()
+    {
+        // Obtener el último registro
+        $lastShipment = Shipment::latest('id')->first();
+
+        if ($lastShipment) {
+            return response()->json(['last_id' => $lastShipment->id], 200);
+        } else {
+            return response()->json(['message' => 'No hay movimientos registrados.'], 404);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

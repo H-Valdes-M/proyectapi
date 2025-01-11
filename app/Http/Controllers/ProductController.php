@@ -30,8 +30,7 @@ class ProductController extends Controller
                 'stock_critico' => 'required|integer|min:0',
             ]);
 
-            // Establecer estado_producto como null (activo) por defecto
-            $validatedData['estado_producto'] = null;
+
 
             $product = Product::create($validatedData);
 

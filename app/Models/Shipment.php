@@ -16,16 +16,13 @@ class Shipment extends Model
         'fecha',
         'destinatario',
         'observacion',
-        'guiadeMov',
-        'nguiaMov',
     ];
 
     // Relación con Usuario
     public function usuario()
     {
-        return $this->belongsTo(Usuario::class, 'usuario');
+        return $this->belongsTo(User::class, 'usuario', 'id');
     }
-
     // Relación con Tribunal
     public function tribunal()
     {

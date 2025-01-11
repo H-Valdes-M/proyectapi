@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->string('marca', 100);
             $table->string('modelo', 100);
             $table->integer('unidades_disponible')->default(0);
-            $table->integer('stock_critico');
-            $table->string('estado_producto', 50);
+            $table->integer('stock_critico')->default(0);
+            $table->integer('estado_producto')->default(1);
             $table->timestamps();
         });
     }

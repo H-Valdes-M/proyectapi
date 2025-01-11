@@ -64,11 +64,15 @@ Route::get('/restock/trashed', [RestockController::class, 'trashed']); //recuper
 
 // Rutas para la guia de envio
 Route::get('/shipments', [ShipmentController::class, 'index'])->name('shipments.index');
+
 Route::post('/shipments', [ShipmentController::class, 'store'])->name('shipments.store');
 Route::get('/shipments/{id}', [ShipmentController::class, 'show'])->name('shipments.show');
 Route::put('/shipments/{id}', [ShipmentController::class, 'update'])->name('shipments.update');
 Route::delete('/shipments/{id}', [ShipmentController::class, 'destroy'])->name('shipments.destroy');
 Route::get('/shipments/trashed', [ShipmentController::class, 'trashed'])->name('shipments.trashed'); // Para recuperar los envíos eliminados
+Route::get('/shipment/last-id', [ShipmentController::class, 'getLastShipmentId']);
+
+
 
 // Rutas para los productos asociados a la guia de envio
 Route::get('/shipment-details', [ShipmentDetailController::class, 'index'])->name('shipmentDetails.index');
