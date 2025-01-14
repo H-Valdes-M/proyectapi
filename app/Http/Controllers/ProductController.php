@@ -141,18 +141,37 @@ class ProductController extends Controller
     $product = Product::where('tipo_Equipo', $tipoEquipo)
                       ->where('marca', $marca)
                       ->where('modelo', $modelo)
-                      ->first(['id']); // Solo obtenemos la ID
+                      ->first(['id', 'unidades_disponible']); // Solo obtenemos la ID
 
     if ($product) {
-        return response()->json(['id' => $product->id]);
+        return response()->json([
+            'id' => $product->id,
+            'unidades_disponible' => $product->unidades_disponible,
+        ]);
     } else {
         return response()->json(['error' => 'Producto no encontrado'], 404);
     }
 }
 
+public function getCriticalStockProducts()
+    {
+        try {
+            // Recuperamos los productos cuyo stock disponible sea igual o menor al stock crítico
+            $criticalProducts = Product::whereColumn('unidades_disponible', '<=', 'stock_critico')->get();
 
+            // Verificamos si encontramos productos con stock crítico
+            if ($criticalProducts->isEmpty()) {
+                return response()->json(['message' => 'No hay productos con stock crítico.'], 200);
+            }
 
+            return response()->json($criticalProducts, 200);
+        } catch (\Exception $e) {
+            // Manejo de errores
+            return response()->json(['error' => 'Hubo un error al obtener los productos con stock crítico: ' . $e->getMessage()], 500);
+        }
+    }
 
+   
 
 
 }

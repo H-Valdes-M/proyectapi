@@ -17,7 +17,7 @@ class TribunalController extends Controller
     public function getTribunal()
     {
         $tribunal = Tribunal::select('id', 'nombre_Tribunal')->orderBy('nombre_Tribunal')->get();
-        return response()->json($tribunal);
+        return response()->json($tribunal, 200);
     }
     
 
@@ -79,4 +79,15 @@ class TribunalController extends Controller
 
         return response()->json(['message' => 'Tribunal eliminado'], 200);
     }
+
+
+
+
+
+
+
+
+
+
+
 }

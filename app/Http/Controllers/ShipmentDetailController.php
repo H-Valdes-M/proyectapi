@@ -76,4 +76,21 @@ class ShipmentDetailController extends Controller
 
         return response()->json(['message' => 'Shipment detail deleted successfully']);
     }
+
+
+    public function getProductsByShipment($idEnvio)
+    {
+        // Obtener todos los detalles de los productos asociados al envío
+        $shipmentDetails = ShipmentDetail::with('product') // Usamos el nombre de la relación definida en el modelo ShipmentDetail
+            ->where('id_envio', $idEnvio)
+            ->get();
+
+        // Devolver los productos asociados
+        return response()->json($shipmentDetails);
+    }
+
+
+
+
+
 }

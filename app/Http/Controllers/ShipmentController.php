@@ -11,7 +11,6 @@ class ShipmentController extends Controller
     public function index()
     {
         $shipments = Shipment::with(['usuario', 'tribunal'])->get();
-       // $shipments = Shipment::all(); // Solo devuelve las que no están "eliminadas"
         return response()->json($shipments->toArray());
     }
 
@@ -90,18 +89,20 @@ class ShipmentController extends Controller
     }
 
 
-
     public function getLastShipmentId()
     {
         // Obtener el último registro
         $lastShipment = Shipment::latest('id')->first();
 
         if ($lastShipment) {
-            return response()->json(['last_id' => $lastShipment->id], 200);
+            return response()->json(['id' => $lastShipment->id], 200);
         } else {
             return response()->json(['message' => 'No hay movimientos registrados.'], 404);
         }
     }
+ 
+    
+};
 
 
 
@@ -117,4 +118,3 @@ class ShipmentController extends Controller
 
 
 
-}

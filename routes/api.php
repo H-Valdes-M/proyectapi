@@ -39,13 +39,13 @@ Route::delete('/tribunal/{id}', [TribunalController::class, 'destroy'])->name('t
 
 
 // Rutas para productos
+Route::get('/product/critical', [ProductController::class, 'getCriticalStockProducts']);
 Route::get('/product', [ProductController::class, 'index'])->name('product.index');
 Route::post('/product', [ProductController::class, 'store'])->name('product.store');
 Route::get('/product/{id}', [ProductController::class, 'show']);
 Route::put('/product/{id}', [ProductController::class, 'update'])->name('product.update');
 Route::delete('/product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 Route::get('/productos/{tipoEquipo}/{marca}/{modelo}/id', [ProductController::class, 'getProductIdByDetails']);
-Route::get('/product/types', [ProductController::class, 'getProductTypes'])->name('product.getProductTypes');
 Route::get('/productos/tipo-equipos', [ProductController::class, 'getTipoEquipos']);
 Route::get('/productos/{tipoEquipo}/marcas', [ProductController::class, 'getMarcasByTipoEquipo']);
 Route::get('/productos/{tipoEquipo}/{marca}/modelos', [ProductController::class, 'getModelosByTipoEquipoAndMarca']);
@@ -64,14 +64,15 @@ Route::get('/restock/trashed', [RestockController::class, 'trashed']); //recuper
 
 // Rutas para la guia de envio
 Route::get('/shipments', [ShipmentController::class, 'index'])->name('shipments.index');
+Route::get('/shipments/lastid', [ShipmentController::class, 'getLastShipmentId']);
+
+
 
 Route::post('/shipments', [ShipmentController::class, 'store'])->name('shipments.store');
 Route::get('/shipments/{id}', [ShipmentController::class, 'show'])->name('shipments.show');
 Route::put('/shipments/{id}', [ShipmentController::class, 'update'])->name('shipments.update');
 Route::delete('/shipments/{id}', [ShipmentController::class, 'destroy'])->name('shipments.destroy');
 Route::get('/shipments/trashed', [ShipmentController::class, 'trashed'])->name('shipments.trashed'); // Para recuperar los envíos eliminados
-Route::get('/shipment/last-id', [ShipmentController::class, 'getLastShipmentId']);
-
 
 
 // Rutas para los productos asociados a la guia de envio
@@ -80,6 +81,7 @@ Route::post('/shipment-details', [ShipmentDetailController::class, 'store'])->na
 Route::get('/shipment-details/{id}', [ShipmentDetailController::class, 'show'])->name('shipmentDetails.show');
 Route::put('/shipment-details/{id}', [ShipmentDetailController::class, 'update'])->name('shipmentDetails.update');
 Route::delete('/shipment-details/{id}', [ShipmentDetailController::class, 'destroy'])->name('shipmentDetails.destroy');
+Route::get('/shipment-details/{idEnvio}/products', [ShipmentDetailController::class, 'getProductsByShipment']);
 
 
 
