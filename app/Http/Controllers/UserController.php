@@ -20,7 +20,6 @@ class UserController extends Controller
         return response()->json($users);
     }
     
-    
      
     public function store(Request $request)
     {
@@ -35,6 +34,36 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User created successfully', 'user' => $user], 201);
     }
+
+    //cambio de rol
+    public function changeRole(Request $request, $id)
+    {
+        try {
+            $user = User::findOrFail($id);
+
+            // Alternar entre roles
+            if ($user->role === 0) {
+                $user->role = 1; // Cambiar a trabajador
+            } else {
+                $user->role = 0; // Cambiar a administrador
+            }
+
+            $user->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Rol actualizado exitosamente.',
+                'user' => $user,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el rol: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    //desactivar usuario
     public function activate($id)
     {
         $user = User::findOrFail($id);
@@ -43,7 +72,7 @@ class UserController extends Controller
 
         return response()->json(['message' => 'User activated successfully', 'user' => $user]);
     }
-
+    //desactivar usuario
     public function deactivate($id)
     {
         $user = User::findOrFail($id);
@@ -96,8 +125,6 @@ class UserController extends Controller
     }
 
 
-
-    //Log de usuario
 
 
 

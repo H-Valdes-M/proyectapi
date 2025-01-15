@@ -22,6 +22,7 @@ Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.dest
 Route::patch('/user/{id}/activate', [UserController::class, 'activate'])->name('user.activate'); // Activa un usuario
 Route::patch('/user/{id}/deactivate', [UserController::class, 'deactivate'])->name('user.deactivate'); // Desactiva un usuario
 Route::post('/user/log-in', [UserController::class, 'login'])->name('user.login'); 
+Route::put('/user/{id}/change-role', [UserController::class, 'changeRole']);
 
 
 
@@ -49,6 +50,7 @@ Route::get('/productos/{tipoEquipo}/{marca}/{modelo}/id', [ProductController::cl
 Route::get('/productos/tipo-equipos', [ProductController::class, 'getTipoEquipos']);
 Route::get('/productos/{tipoEquipo}/marcas', [ProductController::class, 'getMarcasByTipoEquipo']);
 Route::get('/productos/{tipoEquipo}/{marca}/modelos', [ProductController::class, 'getModelosByTipoEquipoAndMarca']);
+Route::put('/product/{id}/update-criticalstock', [ProductController::class, 'updateStockCritico']);
 
 
 // Rutas para restock 
@@ -84,7 +86,3 @@ Route::delete('/shipment-details/{id}', [ShipmentDetailController::class, 'destr
 Route::get('/shipment-details/{idEnvio}/products', [ShipmentDetailController::class, 'getProductsByShipment']);
 
 
-
-
-//Route::get('/upload', [FileUploadController::class, 'index']); 
-//Route::post('/upload', [FileController::class, 'store']);

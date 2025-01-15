@@ -172,6 +172,30 @@ public function getCriticalStockProducts()
     }
 
    
+    public function updateStockCritico(Request $request, $id)
+{
+    // Validar el nuevo valor de stock_critico
+    $request->validate([
+        'stock_critico' => 'required|integer|min:0',
+    ]);
+
+    // Buscar el producto
+    $product = Product::find($id);
+
+    // Verificar si el producto existe
+    if (!$product) {
+        return response()->json(['message' => 'Producto no encontrado'], 404);
+    }
+
+    // Actualizar el stock_critico
+    $product->stock_critico = $request->stock_critico;
+    $product->save();
+
+    return response()->json(['message' => 'Stock crítico actualizado exitosamente', 'product' => $product], 200);
+}
+
+
+
 
 
 }
