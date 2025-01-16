@@ -55,13 +55,16 @@ class ShipmentController extends Controller
         }
     }
 
-    
     // Mostrar un envío específico
     public function show($id)
     {
-        $shipment = Shipment::findOrFail($id);
+        // Buscar el envío con las relaciones 'usuario' y 'tribunal'
+        $shipment = Shipment::with(['usuario', 'tribunal'])->findOrFail($id);
+    
+        // Retornar la información en formato JSON
         return response()->json($shipment);
     }
+    
 
     // Actualizar un envío existente
     public function update(Request $request, $id)

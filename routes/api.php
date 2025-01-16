@@ -5,7 +5,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RestockController;
 use App\Http\Controllers\ShipmentController;
 use App\Http\Controllers\ShipmentDetailController;
-use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\DocumentController;
 
 
 
@@ -86,3 +86,8 @@ Route::delete('/shipment-details/{id}', [ShipmentDetailController::class, 'destr
 Route::get('/shipment-details/{idEnvio}/products', [ShipmentDetailController::class, 'getProductsByShipment']);
 
 
+
+//documentos
+Route::get('/documents', [DocumentController::class, 'index']);  // Ruta para obtener todos los documentos
+Route::post('/documents', [DocumentController::class, 'store']);
+Route::get('/documents/last-id', [DocumentController::class, 'getDocLastId']);

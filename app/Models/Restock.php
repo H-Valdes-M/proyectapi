@@ -19,7 +19,7 @@ class Restock extends Model
         'fecha',          // Fecha del reabastecimiento
         'cant_unidades',  // Cantidad de unidades reabastecidas
         'coment',         // Comentario adicional
-        'doc',            // Ruta del archivo relacionado
+        'doc',            // ID Ruta del archivo relacionado
         'accion',         //añade o retira productos
     ];
     // Relación con Producto
@@ -32,5 +32,11 @@ class Restock extends Model
     public function usuario()
     {
         return $this->belongsTo(User::class, 'usuario', 'id');
+    }
+    // Relación con Document
+
+    public function document()
+    {
+    return $this->belongsTo(Document::class, 'doc', 'id');
     }
 }

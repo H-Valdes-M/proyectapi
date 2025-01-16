@@ -16,7 +16,6 @@ return new class extends Migration {
                 $table->date('fecha');
                 $table->integer('cant_unidades');
                 $table->string('coment')->nullable();
-                $table->string('doc')->nullable();
                 $table->integer('accion'); 
                 $table->timestamps();
                 $table->softDeletes(); // Borrado lógico

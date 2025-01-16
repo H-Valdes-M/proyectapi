@@ -23,12 +23,12 @@ class RestockController extends Controller
 {
     // Validar los datos de entrada
     $request->validate([
-        'producto' => 'required|exists:products,id',
-        'usuario' => 'required|exists:users,id',
+        'producto' => 'required|exists:products,id', //FK
+        'usuario' => 'required|exists:users,id', //FK
         'fecha' => 'required|date',
         'cant_unidades' => 'required|integer',
         'coment' => 'nullable|string',
-        'doc' => 'nullable|file|mimes:pdf,jpg,png,docx|max:10240',
+        'doc' => 'nullable|exists:documents,id', //FK
         'accion' => 'required|integer',
     ]);
 
@@ -43,15 +43,14 @@ class RestockController extends Controller
                 'success' => false,
                 'message' => 'No hay suficientes unidades disponibles para restar.',
                 'error' => 'Cantidad insuficiente',
-            ], 400); 
+            ], 400);
         }
-        
 
         // Actualizar las unidades disponibles del producto
         if ($request->accion == 0) {
-            $product->unidades_disponible -= $request->cant_unidades;  // Restar unidades
+            $product->unidades_disponible -= $request->cant_unidades; // Restar unidades
         } else {
-            $product->unidades_disponible += $request->cant_unidades;  // Sumar unidades
+            $product->unidades_disponible += $request->cant_unidades; // Sumar unidades
         }
 
         $product->save();
@@ -63,12 +62,9 @@ class RestockController extends Controller
             'fecha' => $request->fecha,
             'cant_unidades' => $request->cant_unidades,
             'coment' => $request->coment,
-            'doc' => null, // Se deja null de momento
-            'accion'=>$request->accion,
+            'doc' => $request->doc, // Almacenar el ID del documento
+            'accion' => $request->accion,
         ]);
-
-        // Confirmar transacción
-
 
         return response()->json([
             'success' => true,
@@ -77,7 +73,7 @@ class RestockController extends Controller
             'producto_actualizado' => $product,
         ], 201);
     } catch (\Exception $e) {
-        // Revertir transacción en caso de error
+        // Manejo de errores generales
         return response()->json([
             'success' => false,
             'message' => 'Ocurrió un error al registrar el reabastecimiento.',
@@ -123,7 +119,7 @@ class RestockController extends Controller
 
     public function getRestockFormat()
 {
-    $restocks = Restock::with('producto','usuario')->get();
+    $restocks = Restock::with('producto', 'usuario', 'document')->get();
    return response()->json($restocks->toArray());
 }
 
