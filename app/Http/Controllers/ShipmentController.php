@@ -10,9 +10,17 @@ class ShipmentController extends Controller
     // Mostrar todos los envíos
     public function index()
     {
-        $shipments = Shipment::with(['usuario', 'tribunal'])->get();
+        // Fecha límite de 3 años atrás
+        $dateLimit = now()->subYears(3);
+    
+        // Obtener envíos de los últimos 3 años
+        $shipments = Shipment::with(['usuario', 'tribunal', 'document'])
+                             ->where('fecha', '>=', $dateLimit)
+                             ->get();
+    
         return response()->json($shipments->toArray());
     }
+    
 
     // Crear un nuevo envío
     public function store(Request $request)
@@ -59,7 +67,7 @@ class ShipmentController extends Controller
     public function show($id)
     {
         // Buscar el envío con las relaciones 'usuario' y 'tribunal'
-        $shipment = Shipment::with(['usuario', 'tribunal'])->findOrFail($id);
+        $shipment = Shipment::with(['usuario', 'tribunal', 'document'])->findOrFail($id);
     
         // Retornar la información en formato JSON
         return response()->json($shipment);
@@ -105,6 +113,52 @@ class ShipmentController extends Controller
     }
  
     
+
+  // Actualizar el campo doc por ID
+  public function updateDoc(Request $request, $id)
+  {
+      try {
+          // Validar los datos de entrada
+          $request->validate([
+              'doc' => 'required|exists:documents,id', // Validar que doc existe en la tabla documents
+          ]);
+
+          // Buscar el envío
+          $shipment = Shipment::findOrFail($id);
+
+          // Actualizar el campo doc
+          $shipment->update([
+              'doc' => $request->doc,
+          ]);
+
+          // Respuesta exitosa
+          return response()->json([
+              'success' => true,
+              'message' => 'El campo doc se actualizó exitosamente.',
+              'shipment' => $shipment
+          ], 200);
+
+      } catch (\Illuminate\Validation\ValidationException $e) {
+          // Errores de validación
+          return response()->json([
+              'success' => false,
+              'message' => 'Errores de validación.',
+              'errors' => $e->errors()
+          ], 422);
+
+      } catch (\Exception $e) {
+          // Errores inesperados (como problemas de base de datos)
+          return response()->json([
+              'success' => false,
+              'message' => 'Ocurrió un error al actualizar el campo doc.',
+              'error' => $e->getMessage()
+          ], 500);
+      }
+  }
+
+
+
+
 };
 
 

@@ -16,6 +16,7 @@ class Shipment extends Model
         'fecha',
         'destinatario',
         'observacion',
+        'doc',
     ];
 
     // Relación con Usuario
@@ -27,5 +28,9 @@ class Shipment extends Model
     public function tribunal()
     {
         return $this->belongsTo(Tribunal::class, 'tribunal');
+    }
+    public function document()
+    {
+        return $this->belongsTo(Document::class, 'doc', 'id');
     }
 }

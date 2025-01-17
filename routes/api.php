@@ -75,6 +75,7 @@ Route::get('/shipments/{id}', [ShipmentController::class, 'show'])->name('shipme
 Route::put('/shipments/{id}', [ShipmentController::class, 'update'])->name('shipments.update');
 Route::delete('/shipments/{id}', [ShipmentController::class, 'destroy'])->name('shipments.destroy');
 Route::get('/shipments/trashed', [ShipmentController::class, 'trashed'])->name('shipments.trashed'); // Para recuperar los envíos eliminados
+Route::put('/shipments/{id}/doc', [ShipmentController::class, 'updateDoc']);
 
 
 // Rutas para los productos asociados a la guia de envio
